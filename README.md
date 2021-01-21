@@ -1,6 +1,6 @@
 # Introduction
 
-The introduction.pdf contains the exercises
+The introduction.pdf contains the exercises descriptions
 
 recursion.ex contains the bulk of the exercises to do with recursion etc
 
