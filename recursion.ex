@@ -1,5 +1,11 @@
 defmodule Recursion do
 
+    @moduledoc """
+    My solutions to the exercises in introduction.pdf
+    """
+
+
+
     @doc """
     Computes the product of m to the power of n
 
@@ -195,9 +201,7 @@ defmodule Recursion do
             iex> Recursion.add(5, l)
             [1,2,3,4,5]
     """
-    def add(x, []) do
-        [x]
-    end
+    def add(x, []) do [x] end
     def add(x, l) do
         [head | tail] = l
         cond do
@@ -223,9 +227,7 @@ defmodule Recursion do
             iex> Recursion.remove(3, l)
             [1,2,1,4,1]
     """
-    def remove(_x, []) do
-        []
-    end
+    def remove(_x, []) do [] end
     def remove(x, l) do
         [head | tail] = l
         cond do
@@ -245,17 +247,13 @@ defmodule Recursion do
             iex> Recursion.unique(l)
             [:a,:b,:d]
     """
-    def unique([]) do
-        []
-    end
+    def unique([]) do [] end
     def unique(l) do
         [head | tail] = l
         [head | unique(unique(head, tail))]
     end
     #Functions to remove instanes matching head
-    def unique(_x, []) do
-        []
-    end
+    def unique(_x, []) do [] end
     def unique(x, l) do #x is head, l is tail
         [head | tail] = l
         cond do
@@ -266,7 +264,7 @@ defmodule Recursion do
 
 
     @doc """
-    Packs equal elements in lists containg equal elements
+    This function packs equal elements in lists containg equal elements
 
     Returns a list of lists with equal elements
 
@@ -275,5 +273,42 @@ defmodule Recursion do
             iex> l = [:a,:a,:b,:c,:b,:a,:c]
             iex> Recursion.pack(l)
             [[:a,:a,:a], [:b, :b], [:c, :c]]
+    """ ##WIP
+    def pack(l) do
+        l
+    end
+
+    @doc """
+    This function reverses a given list l
+
+    Returns a list where the order of elements is reversed
+
+    ## Example
+
+            iex> l = [1,2,3,4,5]
+            iex> Recursion.rev(l)
+            [5,4,3,2,1]
+    """ ##WIP
+    def rev(l) do
+        l
+    end
+
+    @doc """
+    DISCLAIMER: Not my own reverse functions
+    These functions are taken from "5 Reverse" in introduction.pdf
     """
+    #def nreverse([]) do [] end
+    #def nreverse([h | t]) do
+    #    r = nreverse(t)
+    #    #append(r, [h]) Append function not made by me yet
+    #end
+
+
+    def reverse(1) do
+        reverse(1, [])
+    end
+    def reverse([], r) do r end
+    def reverse([h | t], r) do
+        reverse(t, [h | r])
+    end
 end
