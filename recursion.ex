@@ -274,9 +274,24 @@ defmodule Recursion do
             iex> Recursion.pack(l)
             [[:a,:a,:a], [:b, :b], [:c, :c]]
     """ ##WIP
-    def pack(l) do
-        l
+    def pack(list) do pack(list, []) end
+    def pack([], pckd_lst) do pckd_lst end
+    def pack([hd | tl], pckd_lst) do
+        pack(remove(hd, tl), [pack(hd, tl, []) | pckd_lst])
     end
+    def pack(x, [], sub_lst) do
+        [x | sub_lst]
+    end
+    def pack(x, [h | t], sub_lst) do
+        if x == h do
+            pack(x, t, [h | sub_lst])
+        else
+            pack(x, t, sub_lst)
+        end
+    end
+    ##This must be the stinkiest shit I have done in a long time
+
+
 
     @doc """
     This function reverses a given list l
@@ -289,9 +304,15 @@ defmodule Recursion do
             iex> Recursion.rev(l)
             [5,4,3,2,1]
     """ ##WIP
-    def rev(l) do
-        l
+    def rev(list) do
+        rev([], list)
     end
+    defp rev(rev_lst, []) do rev_lst end
+    defp rev(rev_lst, [head | tail]) do
+        rev([head | rev_lst], tail)
+    end
+    ##Ended up just being like the one given... Omg
+
 
     @doc """
     DISCLAIMER: Not my own reverse functions
@@ -304,8 +325,8 @@ defmodule Recursion do
     #end
 
 
-    def reverse(1) do
-        reverse(1, [])
+    def reverse(l) do
+        reverse(l, [])
     end
     def reverse([], r) do r end
     def reverse([h | t], r) do
