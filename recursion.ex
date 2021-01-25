@@ -276,9 +276,9 @@ defmodule Recursion do
     """ ##WIP
     def pack(list) do pack(list, []) end
     def pack([], pckd_lst) do pckd_lst end
-    def pack([hd | tl], pckd_lst) do
-        pack(remove(hd, tl), [pack(hd, tl, []) | pckd_lst])
-    end
+    def pack([h | t], pckd_lst) do
+        pack(remove(h, t), [pack(h, t, []) | pckd_lst])
+    end ##Remove function is from a previous exercise
     def pack(x, [], sub_lst) do
         [x | sub_lst]
     end
@@ -289,8 +289,18 @@ defmodule Recursion do
             pack(x, t, sub_lst)
         end
     end
-    ##This must be the stinkiest shit I have done in a long time
-    ##Need a better version ASAP
+    ##This must be the messiest code I have done in a long time
+
+    ##Version by teacher ->
+    def pck(lst) do pck(lst, []) end
+    def pck([], all) do all end
+    def pck([h | t], all) do
+        pack(t, add_elm(h, all))
+    end
+    def add_elm(elm, []) do [[elm]] end
+    def add_elm(elm, [elm | _]) do
+        []
+    end
 
 
 
@@ -304,7 +314,7 @@ defmodule Recursion do
             iex> l = [1,2,3,4,5]
             iex> Recursion.rev(l)
             [5,4,3,2,1]
-    """ ##WIP
+    """
     def rev(list) do
         rev([], list)
     end
@@ -312,7 +322,7 @@ defmodule Recursion do
     defp rev(rev_lst, [head | tail]) do
         rev([head | rev_lst], tail)
     end
-    ##Ended up just being like the one given... Omg
+    ##Ended up just being like the one given...
 
 
     @doc """
@@ -359,43 +369,75 @@ defmodule Recursion do
     are then merged into one final sorted list.
     The two last lists are marged by picking the smallest of the elements
     from each list. Since each list is sorted, one need only to look at
-    the first element of each list to determine which is element is
+    the first element of each list to determine which element is
     the smallest.
-    """
-
+    """ ##WIP DOESNT WORK
     def mergesort(l) do
         case l do
             [] -> l
             _ ->
-                {left , right} = ms_split(l, [], [])
+                {left , right} = split(l, [], [])
                 merge(mergesort(left), mergesort(right))
         end
     end
 
-    def merge([], [h | t]) do [h | t] end
-    def merge([h | t], []) do [h | t] end
-    def merge([left_head | left_tail], [right_head | right_tail]) do
-        if left_head <= right_head do
-            merge([[left_head | left_tail] | right_head] , right_tail)
+    defp merge([], all) do all end
+    defp merge(all, []) do all end
+    defp merge([left_h | left_t]=left, [right_h | right_t]=right) do
+        if left_h <= right_h do
+            merge(append(left, right) , [])
         else
-            merge(tail , [[right_head | right_tail] | left_head])
+            merge([], append(right, left))
+        end
+    end
+    defp split([], left, right) do {left, right} end
+    defp split([h | t], left, right) do
+        if rem(h, 2) == 1 do
+            split(t, [h | left], right)
+        else
+            split(t, left, [h | right])
         end
     end
 
-    def ms_split([h | t], left, right)
-    case l do
-        [] -> {left, right}
-        _ ->
-            ms_split(t, , )
+    @doc """
+    
+    """ ##WIP DOESNT WORK
+    def qsort([]) do [] end
+    def qsort([p | l]) do
+        {small, large} = qsplit(p, l, [], [])
+        small = qsort(small)
+        large = qsort(large)
+        append(small, [p | large])
+    end
+    def qsplit(_, [], small, large) do {small, large} end
+    def qsplit(p, [h | t], small, large) do
+        if h < p do
+            qsplit(p, t, [h | small], large)
+        else
+            qsplit(p, t, small, [h | large])
+        end
+    end
+    def append(first, last) do
+        case first do
+            [] -> last
+            [h | t] -> append(t, [h | last])
+            _ -> :error
+        end
+    end
+
+
+
+
+
     @doc """
     DISCLAIMER: Not my own reverse functions
     These functions are taken from "5 Reverse" in introduction.pdf
     """
-    #def nreverse([]) do [] end
-    #def nreverse([h | t]) do
-    #    r = nreverse(t)
-    #    #append(r, [h]) Append function not made by me yet
-    #end
+    def nreverse([]) do [] end
+    def nreverse([h | t]) do
+        r = nreverse(t)
+        append(r, [h])
+    end
 
     def reverse(l) do
         reverse(l, [])
