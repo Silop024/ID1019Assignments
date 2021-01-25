@@ -290,6 +290,7 @@ defmodule Recursion do
         end
     end
     ##This must be the stinkiest shit I have done in a long time
+    ##Need a better version ASAP
 
 
 
@@ -315,6 +316,78 @@ defmodule Recursion do
 
 
     @doc """
+    This function sorts a list of elements by taking them one at a time
+    and insert them into an already sorted list. The already sorted list
+    will be empty at start and then contain all the elements when done.
+
+    """
+    def insert(element, list) do
+        if list == [] do
+            [element | list]
+        else
+            [head | tail] = list
+            cond do
+                element > head -> [head | insert(element, tail)]
+                element <= head -> [element | list]
+            end
+        end
+    end
+    @doc """
+    This function, with the help of insert, sorts a given list of
+    integers.
+
+    Returns a sorted list of integers.
+
+    ## Example
+
+            iex> l = [3,2,5,1,4]
+            iex> Recursion.isort(l)
+            [1,2,3,4,5]
+    """
+    def isort(list) do isort(list, []) end
+    def isort(list, sorted) do
+        case list do
+            [] -> sorted
+            [h | t] -> isort(t, insert(h, sorted))
+            _ -> "error"
+        end
+    end
+
+    @doc """
+    This function divides the list into two lists. Then merge sort each
+    of those lists two obtain two sorted sub-lists. These sorted sub-lists
+    are then merged into one final sorted list.
+    The two last lists are marged by picking the smallest of the elements
+    from each list. Since each list is sorted, one need only to look at
+    the first element of each list to determine which is element is
+    the smallest.
+    """
+
+    def mergesort(l) do
+        case l do
+            [] -> l
+            _ ->
+                {left , right} = ms_split(l, [], [])
+                merge(mergesort(left), mergesort(right))
+        end
+    end
+
+    def merge([], [h | t]) do [h | t] end
+    def merge([h | t], []) do [h | t] end
+    def merge([left_head | left_tail], [right_head | right_tail]) do
+        if left_head <= right_head do
+            merge([[left_head | left_tail] | right_head] , right_tail)
+        else
+            merge(tail , [[right_head | right_tail] | left_head])
+        end
+    end
+
+    def ms_split([h | t], left, right)
+    case l do
+        [] -> {left, right}
+        _ ->
+            ms_split(t, , )
+    @doc """
     DISCLAIMER: Not my own reverse functions
     These functions are taken from "5 Reverse" in introduction.pdf
     """
@@ -323,7 +396,6 @@ defmodule Recursion do
     #    r = nreverse(t)
     #    #append(r, [h]) Append function not made by me yet
     #end
-
 
     def reverse(l) do
         reverse(l, [])
