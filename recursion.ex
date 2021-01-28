@@ -291,18 +291,45 @@ defmodule Recursion do
     end
     ##This must be the messiest code I have done in a long time
 
-    ##Version by teacher ->
+    ##Version by teacher, very nicee
     def pck(lst) do pck(lst, []) end
     def pck([], all) do all end
     def pck([h | t], all) do
-        pack(t, add_elm(h, all))
+        :io.format("h = ~w, t = ~w, acc = ~w\n", [h, t, all])
+        pck(t, add_elm(h, all))
     end
-    def add_elm(elm, []) do [[elm]] end
-    def add_elm(elm, [elm | _]) do
-        []
+    def add_elm(elm, []) do [[elm]] end ##If empty just add it
+    def add_elm(elm, [[elm | _t] = sublist | rest]) do #If the element is the same as the head of the sublist, add it to that sublist
+        [[elm | sublist] | rest]
+    end
+    def add_elm(elm, [first | rest]) do #If not, go to the next sublist
+        [first | add_elm(elm, rest)]
+    end
+    ##Another version one by teacher, worse since no accumulator
+    def pock([]) do [] end
+    def pock([h | t]) do
+        packed = pock(t)
+        ins(h, packed)
+    end
+    def ins(h, []) do [[h]] end
+    def ins(h, [[h | t] | rest]) do
+        [[h, h | t] | rest]
+    end
+    def ins(h, [first | rest]) do
+        [first | ins(h, rest)]
     end
 
-
+    ##New version by me after, try to do tail recursion for sublist somehow?
+    def pakk(lst) do pakk(lst, []) end
+    def pakk([], acc) do acc end
+    def pakk([h | t], acc) do
+        pack(t, pakk(h, acc, []))
+    end
+    def pakk(_h, [], acc) do acc end
+    def pakk(h, [[h | _t] = sub | rest], acc) do
+        #filler so I dont get compile warning, but tail recurse somehow????
+        [[h | sub] | [rest | acc]]
+    end
 
     @doc """
     This function reverses a given list l
@@ -380,7 +407,7 @@ defmodule Recursion do
                 merge(mergesort(left), mergesort(right))
         end
     end
-
+    ##SHOULD NOT USE APPEND WHAT TO DO WHAT TO DO
     defp merge([], all) do all end
     defp merge(all, []) do all end
     defp merge([left_h | left_t]=left, [right_h | right_t]=right) do
@@ -400,8 +427,8 @@ defmodule Recursion do
     end
 
     @doc """
-    
-    """ ##WIP DOESNT WORK
+
+    """ ##WIP DOESNT WORK, APPEND BROKEN ALSO
     def qsort([]) do [] end
     def qsort([p | l]) do
         {small, large} = qsplit(p, l, [], [])
