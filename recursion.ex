@@ -403,32 +403,46 @@ defmodule Recursion do
         case l do
             [] -> l
             _ ->
-                {left , right} = split(l, [], [])
-                merge(mergesort(left), mergesort(right))
+                {left , right} = split(l, [], [], 1)
+                merge(mergesort(left), mergesort(right), [])
         end
     end
-    ##SHOULD NOT USE APPEND WHAT TO DO WHAT TO DO
-    defp merge([], all) do all end
-    defp merge(all, []) do all end
-    defp merge([left_h | left_t]=left, [right_h | right_t]=right) do
+    ##SHOULD NOT USE APPEND WHAT TO DO WHAT TO DO, ALSO SPLIT PROPS FUCKED
+    defp merge(_, [], all) do all end
+    defp merge([], _, all) do all end
+    defp merge([left_h | left_t]=left, [right_h | right_t]=right, acc) do
         if left_h <= right_h do
-            merge(append(left, right) , [])
+            merge(left_t, right, [left_h | acc])
         else
-            merge([], append(right, left))
+            merge(left, right_t, [right_h | acc])
         end
     end
-    defp split([], left, right) do {left, right} end
-    defp split([h | t], left, right) do
-        if rem(h, 2) == 1 do
-            split(t, [h | left], right)
+    defp split([], left, right, _n) do {left, right} end
+    defp split([h | t], left, right, n) do
+        if rem(n, 2) == 1 do
+            split(t, [h | left], right, n + 1)
         else
-            split(t, left, [h | right])
+            split(t, left, [h | right], n + 1)
         end
     end
 
     @doc """
+    This founction first splits the list into two parts, one containing low
+    elements and one containing high elements. Then sort the two lists and when
+    done appends the results.
 
-    """ ##WIP DOESNT WORK, APPEND BROKEN ALSO
+    Splitting the lists is done using the first element in the list as a pivot
+    element, all smaller or equal than this is added in one list and all larger
+    in one list. When appending the final result, the pivot element is put in
+    the middle.
+
+    Returns a sorted list of integers
+
+    Example
+
+            iex> Recursion.qsort([3,2,5,1,4])
+            [1,2,3,4,5]
+    """
     def qsort([]) do [] end
     def qsort([p | l]) do
         {small, large} = qsplit(p, l, [], [])
@@ -447,7 +461,7 @@ defmodule Recursion do
     def append(first, last) do
         case first do
             [] -> last
-            [h | t] -> append(t, [h | last])
+            [h | t] -> [h | append(t, last)]
             _ -> :error
         end
     end
