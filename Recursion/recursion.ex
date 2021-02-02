@@ -179,6 +179,7 @@ defmodule Recursion do
         end
     end
 
+    #wrong version, gives a list of two equal lists
     def dupe(l) do
         [l | [l]]
     end
@@ -291,45 +292,18 @@ defmodule Recursion do
     end
     ##This must be the messiest code I have done in a long time
 
-    ##Version by teacher, very nicee
+    ##Version by teacher ->
     def pck(lst) do pck(lst, []) end
     def pck([], all) do all end
     def pck([h | t], all) do
-        :io.format("h = ~w, t = ~w, acc = ~w\n", [h, t, all])
-        pck(t, add_elm(h, all))
+        pack(t, add_elm(h, all))
     end
-    def add_elm(elm, []) do [[elm]] end ##If empty just add it
-    def add_elm(elm, [[elm | _t] = sublist | rest]) do #If the element is the same as the head of the sublist, add it to that sublist
-        [[elm | sublist] | rest]
-    end
-    def add_elm(elm, [first | rest]) do #If not, go to the next sublist
-        [first | add_elm(elm, rest)]
-    end
-    ##Another version one by teacher, worse since no accumulator
-    def pock([]) do [] end
-    def pock([h | t]) do
-        packed = pock(t)
-        ins(h, packed)
-    end
-    def ins(h, []) do [[h]] end
-    def ins(h, [[h | t] | rest]) do
-        [[h, h | t] | rest]
-    end
-    def ins(h, [first | rest]) do
-        [first | ins(h, rest)]
+    def add_elm(elm, []) do [[elm]] end
+    def add_elm(elm, [elm | _]) do
+        []
     end
 
-    ##New version by me after, try to do tail recursion for sublist somehow?
-    def pakk(lst) do pakk(lst, []) end
-    def pakk([], acc) do acc end
-    def pakk([h | t], acc) do
-        pack(t, pakk(h, acc, []))
-    end
-    def pakk(_h, [], acc) do acc end
-    def pakk(h, [[h | _t] = sub | rest], acc) do
-        #filler so I dont get compile warning, but tail recurse somehow????
-        [[h | sub] | [rest | acc]]
-    end
+
 
     @doc """
     This function reverses a given list l
@@ -399,49 +373,27 @@ defmodule Recursion do
     the first element of each list to determine which element is
     the smallest.
     """ ##WIP DOESNT WORK
-    def mergesort(l) do
+    def msort(l) do
         case l do
-            [] -> l
+            [] ->  []
             _ ->
-                {left , right} = split(l, [], [], 1)
-                merge(mergesort(left), mergesort(right), [])
+            {left, right} = msplit(l, [], [])
+            merge(msort(left), msort(right))
         end
     end
-    ##SHOULD NOT USE APPEND WHAT TO DO WHAT TO DO, ALSO SPLIT PROPS FUCKED
-    defp merge(_, [], all) do all end
-    defp merge([], _, all) do all end
-    defp merge([left_h | left_t]=left, [right_h | right_t]=right, acc) do
-        if left_h <= right_h do
-            merge(left_t, right, [left_h | acc])
-        else
-            merge(left, right_t, [right_h | acc])
+    def merge([], right) do right end
+    def merge(left, []) do left end
+    def merge(right, right) do
+        "nothing yet"
+    end
+    def msplit(l, left, right) do
+        case l do
+            [] -> {left ,right}
+            _ -> msplit(... , ... , ...)
         end
     end
-    defp split([], left, right, _n) do {left, right} end
-    defp split([h | t], left, right, n) do
-        if rem(n, 2) == 1 do
-            split(t, [h | left], right, n + 1)
-        else
-            split(t, left, [h | right], n + 1)
-        end
-    end
-
     @doc """
-    This founction first splits the list into two parts, one containing low
-    elements and one containing high elements. Then sort the two lists and when
-    done appends the results.
 
-    Splitting the lists is done using the first element in the list as a pivot
-    element, all smaller or equal than this is added in one list and all larger
-    in one list. When appending the final result, the pivot element is put in
-    the middle.
-
-    Returns a sorted list of integers
-
-    Example
-
-            iex> Recursion.qsort([3,2,5,1,4])
-            [1,2,3,4,5]
     """
     def qsort([]) do [] end
     def qsort([p | l]) do
@@ -461,7 +413,7 @@ defmodule Recursion do
     def append(first, last) do
         case first do
             [] -> last
-            [h | t] -> [h | append(t, last)]
+            [h | t] -> append(t, [h | last])
             _ -> :error
         end
     end
