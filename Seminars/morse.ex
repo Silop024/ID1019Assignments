@@ -2,43 +2,45 @@ defmodule Morse do
 
   def test() do
     signal = '... --- ...'
-    decode(signal)
+    signal2 = base()
+    signal3 = rolled()
+    decode(signal3)
   end
 
-  def decode(signal) do
-    table = decode_table()
-    decode(signal, table)
-  end
+    def decode(signal) do
+        table = decode_table()
+        decode(signal, table)
+    end
 
-  ## Fill in the empty ... spaces
+    ## Fill in the empty ... spaces
 
-  def decode([], _) do [] end
-  def decode(signal, table) do
-    {char, rest} = decode_char(signal, table)
-    [char | decode(rest, table)]
-  end
+    def decode([], _) do [] end
+    def decode(signal, table) do
+      {char, rest} = decode_char(signal, table)
+        [char | decode(rest, table)]
+    end
 
-  def decode_char([], {:node, char, _, _}) do
-    {char, []}
-  end
-  def decode_char([?- | signal], {:node, _, long, _}) do
-    decode_char(signal, long)
-  end
-  def decode_char([?. | signal], {:node, _, _, short}) do
-      decode_char(signal, short)
-  end
-  def decode_char([?\s | signal], {:node, char, _, _}) do
-    {char, signal}
-  end
+    def decode_char([], {:node, char, _, _}) do
+        {char, []}
+    end
+    def decode_char([?- | signal], {:node, _, long, _}) do
+        decode_char(signal, long)
+    end
+    def decode_char([?. | signal], {:node, _, _, short}) do
+        decode_char(signal, short)
+    end
+    def decode_char([?\s | signal], {:node, char, _, _}) do
+        {char, signal}
+    end
 
 
-  # Some test samples to decode, a signal must end with a space ' '
-  def base(), do: '.- .-.. .-.. ..-- -.-- --- ..- .-. ..-- -... .- ... . ..-- .- .-. . ..-- -... . .-.. --- -. --. ..-- - --- ..-- ..- ...'
+    # Some test samples to decode, a signal must end with a space ' '
+    def base(), do: '.- .-.. .-.. ..-- -.-- --- ..- .-. ..-- -... .- ... . ..-- .- .-. . ..-- -... . .-.. --- -. --. ..-- - --- ..-- ..- ...'
 
-  def rolled(), do: '.... - - .--. ... ---... .----- .----- .-- .-- .-- .-.-.- -.-- --- ..- - ..- -... . .-.-.- -.-. --- -- .----- .-- .- - -.-. .... ..--.. ...- .----. -.. .--.-- ..... .---- .-- ....- .-- ----. .--.-- ..... --... --. .--.-- ..... ---.. -.-. .--.-- ..... .----'
+    def rolled(), do: '.... - - .--. ... ---... .----- .----- .-- .-- .-- .-.-.- -.-- --- ..- - ..- -... . .-.-.- -.-. --- -- .----- .-- .- - -.-. .... ..--.. ...- .----. -.. .--.-- ..... .---- .-- ....- .-- ----. .--.-- ..... --... --. .--.-- ..... ---.. -.-. .--.-- ..... .----'
 
-  # Morse decoding tree as {:node, char, long, short}
-  defp decode_table do
+    # Morse decoding tree as {:node, char, long, short}
+    defp decode_table do
     {:node, :na,
       {:node, 116,
         {:node, 109,
@@ -76,6 +78,6 @@ defmodule Morse do
           {:node, 115,
             {:node, 118, {:node, 51, nil, nil}, nil},
             {:node, 104, {:node, 52, nil, nil}, {:node, 53, nil, nil}}}}}}
-  end
+    end
 
 end
