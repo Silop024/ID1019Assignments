@@ -1,3 +1,4 @@
 # Programming2
 
-Recursion has all of the recursion related exercies
+The names of the folders should be self-explanatory as to what
+you'll find in them
