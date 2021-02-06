@@ -32,10 +32,13 @@ defmodule Train do
     end
 
     def move([], state) do [state | []] end
-    def move([h | t], s) do
-        [s | move(t, single(h, s))]
+    def move([h | t], state) do
+        [state | move(t, single(h, state))]
     end
 
+    ##Had to add the case because when doing the
+    ##append(drop(main, n), t), if there was only one element left
+    ##in the main, it would append [] with t, doing nothing.
     def move_n_wagons_hi({:one, n}, {main, t1, t2}) do
         case main do
             [] -> {main, t1, t2}
@@ -60,9 +63,25 @@ defmodule Train do
         {append(main, take(t2, n)), t1, drop(t2, n)}
     end
 
+    ##Each train contain the same amount of wagons, unique wagons
+    ##Returns a list of moves, such that the moves transform the
+    ##state {train1, [], []} into {train2, [], []}
+    def find([], _) do [] end
+    def find(train1, train2) do
+        frst_wgn = take(train2, 1)
+        {hs, ts} = split(train1, frst_wgn)
+    end
+
+    def split(train, x) do
+        n = position(train, x)
+        hs = take(train, n - 1)
+        ts = drop(train, n)
+        {hs, ts}
+    end
+
 
     def take([], _) do [] end
-    def take(lst, 0) do [] end
+    def take(_, 0) do [] end
     def take([h | t], n) do
         [h | take(t, n - 1)]
     end
