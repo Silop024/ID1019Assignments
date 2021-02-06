@@ -299,8 +299,25 @@ defmodule Recursion do
         pack(t, add_elm(h, all))
     end
     def add_elm(elm, []) do [[elm]] end
-    def add_elm(elm, [elm | _]) do
-        []
+    def add_elm(elm, [elm | _t] = sublist | rest) do
+        [[elm | sublist] | rest]
+    end
+    def add_elm(elm, [first | rest]) do
+        [fist | add_elm(elm, rest)]
+    end
+
+    ##Another version by teacher
+    def pock([]) do [] end
+    def pock([h | t]) do
+        packed = pock(t)
+        ins(h, packed)
+    end
+    def ins(h, []) do [[h]] end
+    def ins(h, [[h | t] | rest]) do
+        [[h, h | t] | rest]
+    end
+    def ins(h, [first | rest]) do
+        [first | ins(h, rest)]
     end
 
 
@@ -413,7 +430,7 @@ defmodule Recursion do
     def append(first, last) do
         case first do
             [] -> last
-            [h | t] -> append(t, [h | last])
+            [h | t] -> [h | append(t, last)]
             _ -> :error
         end
     end
