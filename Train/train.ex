@@ -4,7 +4,7 @@ defmodule Train do
 
     @type state() :: {train(), train(), train()}
 
-    @type move() :: {:one, number()} | {:two, number()}
+    @type mov() :: {:one, number()} | {:two, number()}
 
     def test() do
         s = {[:a, :b], [:c, :d], [:e, :f]}
@@ -66,10 +66,16 @@ defmodule Train do
     ##Each train contain the same amount of wagons, unique wagons
     ##Returns a list of moves, such that the moves transform the
     ##state {train1, [], []} into {train2, [], []}
-    def find([], _) do [] end
+    ##aka, the moves to make train1 into train2
+    def find([], _) do [] end ##HOW THA FACK
     def find(train1, train2) do
-        frst_wgn = take(train2, 1)
+        [frst_wgn | _] = take(train2, 1)
         {hs, ts} = split(train1, frst_wgn)
+        find(hs, ts)
+
+
+
+
     end
 
     def split(train, x) do
