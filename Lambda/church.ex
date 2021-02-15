@@ -1,4 +1,18 @@
 defmodule Church do
+
+    def test() do
+        four = to_church(4)
+        three = to_church(3)
+        r = add(four, three)
+        #r = minus(four, three)
+
+        to_integer(r)
+    end
+
+
+
+
+
     def append(a, b) do
         app = fn x, y, f ->
             case x do
@@ -26,10 +40,8 @@ defmodule Church do
 
     def pred(church) do
         fn(f, x) ->
-            ( church.(
-                fn(g) -> fn(h) -> h.(g.(f)) end end,
-                fn(_) -> x end)
-            ).(fn(u) -> u end)
+            (church.(fn(g) -> fn(h) -> h.(g.(f)) end end,
+            fn(_) -> x end)).(fn(u) -> u end)
         end
     end
 
@@ -41,9 +53,8 @@ defmodule Church do
         fn(f, x) -> c1.(fn(y) -> c2.(f, y) end, x) end
     end
 
-    def minus(c1, c2) do
+    def minus(_c1, _c2) do
         #Subtract from c1 using pred, c2 times
-        #fn(f, x) -> c2.(fn(y) -> pred(c1).(f, y) end, x) end
-        pred(fn(f, x) -> c1.(f, x) end)
+        "nothing, f.(lambda calculus)"
     end
 end
