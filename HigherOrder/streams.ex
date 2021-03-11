@@ -1,13 +1,12 @@
 defmodule Streams do
 
-    #1
+    #1.1 Sum of all integers
     def sum({:range, from, from}) do from end
     def sum({:range, from, to}) do
         to + sum({:range, from, to - 1})
     end
 
 
-    #2
     def sumR(range) do reduce(range, 0, fn(x, a) -> x + a end) end
 
     def reduce({:range, from, to}, acc, func) do
@@ -19,21 +18,21 @@ defmodule Streams do
     end
 
 
-    #3
     def map({:range, from, from}, func) do [func.(from)] end
     def map({:range, from, to}, func) do
         [func.(from) | map({:range, from + 1, to}, func)]
     end
 
+    #1.2
     def take({:range, _, _}, 0) do [] end
     def take({:range, from, to}, n) do
         [from | take({:range, from + 1, to}, n - 1)]
     end
 
 
-    #4
     def sumG(range) do
-        reduceG(range, {:cont, 0}, fn(x, a) -> {:cont, x + a} end)
+        {_, res} = reduceG(range, {:cont, 0}, fn(x, a) -> {:cont, x + a} end)
+        res
     end
 
     def reduceG({:range, from, to}, {:cont, acc}, func) do
@@ -46,9 +45,24 @@ defmodule Streams do
     def reduceG({:range, _from, _to}, {:halt, acc}, _func) do
         {:halted, acc}
     end
+    #1.4 Reduce a list
+    def reduceG([h | t], {:cont, acc}, func) do
+        reduceG(t, func.(h, acc), func)
+    end
+    def reduceG([], {:cont, acc}, _) do
+        {:done, acc}
+    end
+    #2.1
+    def reduceG({:stream, fun}, {:cont, acc}, func) do
+        case fib(fun, func) do
+            {:ok, from, cont} ->
+                reduceG({:stream, fun}, func.(from, acc), func)
+            :nil ->
+                {:done, acc}
+        end
+    end
 
-
-    #5
+    #1.2
     def takeG(range, n) do
         {_, res} = reduceG(range, {:cont, {:sofar, 0, []}},
             fn(x, {:sofar, s, acc}) ->
@@ -63,5 +77,18 @@ defmodule Streams do
             _ -> res
         end
     end
+
+    #1.3
+    ##do stuff here
+
+    #2.1
+    def fib() do {:stream, fn() -> fib(1, 1) end} end
+    def fib(f1, f2) do
+        {:ok, f1, fn() -> fib(f2, f1 + f2) end}
+    end
+
+
+
+
 
 end
