@@ -303,7 +303,7 @@ defmodule Recursion do
         [[elm | sublist] | rest]
     end
     def add_elm(elm, [first | rest]) do
-        [fist | add_elm(elm, rest)]
+        [first | add_elm(elm, rest)]
     end
 
     ##Another version by teacher
@@ -400,14 +400,16 @@ defmodule Recursion do
     end
     def merge([], right) do right end
     def merge(left, []) do left end
-    def merge(right, right) do
-        "nothing yet"
-    end
-    def msplit(l, left, right) do
-        case l do
-            [] -> {left ,right}
-            _ -> msplit(... , ... , ...)
+    def merge([hl | tl] = left, [hr | tr] = right) do
+        if hl < hr do
+            [hl | merge(tl, right)]
+        else
+            [hr | merge(left, tr)]
         end
+    end
+    def msplit([], left, right) do {left, right} end
+    def msplit([h | t], left, right) do
+        msplit(t, [h | right], left)
     end
     @doc """
 
