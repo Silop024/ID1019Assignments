@@ -296,7 +296,7 @@ defmodule Recursion do
     def pck(lst) do pck(lst, []) end
     def pck([], all) do all end
     def pck([h | t], all) do
-        pack(t, add_elm(h, all))
+        pck(t, add_elm(h, all))
     end
     def add_elm(elm, []) do [[elm]] end
     def add_elm(elm, [elm | _t] = sublist | rest) do
