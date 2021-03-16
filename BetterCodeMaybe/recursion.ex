@@ -76,9 +76,7 @@ defmodule Recursion do
     """
     def dupe(lst) do dupe(lst, []) end
     def dupe([], duped) do duped end
-    def dupe([h | t], duped) do
-        dupe(t, [h, h | duped])
-    end
+    def dupe([h | t], duped) do dupe(t, [h, h | duped]) end
 
     @doc """
     Returns a list of lists with equal elements
@@ -88,16 +86,12 @@ defmodule Recursion do
     """
     def pack(lst) do pack(lst, []) end
     def pack([], packed) do packed end
-    def pack([h | t], packed) do
-        pack(t, add_pack(h, packed))
-    end
+    def pack([h | t], packed) do pack(t, add_pack(h, packed)) end
     def add_pack(e, []) do [[e]] end
     def add_pack(e, [[e | _]=sub | rest]) do
         [[e | sub] | rest]
     end
-    def add_pack(e, [h | t]) do
-        [h | add_pack(e, t)]
-    end
+    def add_pack(e, [h | t]) do [h | add_pack(e, t)] end
 
     @doc """
     Inserts an element into an alread sorted list, keeping the
@@ -106,9 +100,7 @@ defmodule Recursion do
     Not sure about time complexity, around O(n)?
     """
     def insert(e, []) do [e] end
-    def insert(e, [h | t]) when h < e do
-        [h | insert(e, t)]
-    end
+    def insert(e, [h | t]) when h < e do [h | insert(e, t)] end
     def insert(e, lst) do [e | lst] end
 
     @doc """
@@ -119,7 +111,7 @@ defmodule Recursion do
     """
     def isort(lst) do isort(lst, []) end
     def isort([], sorted) do sorted end
-    def isort([h | t], sorted) do
-        isort(t, insert(h, sorted))
-    end
+    def isort([h | t], sorted) do isort(t, insert(h, sorted)) end
+
+
 end
