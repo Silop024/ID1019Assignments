@@ -43,7 +43,7 @@ defmodule Recursion do
     @doc """
     Returns a list of unique elements from a given list
 
-    Not sure about time complexity probably pretty bad
+    Not sure about time complexity probably O(n^2)
     """
     def unique([]) do [] end
     def unique([h | t]) do
@@ -63,7 +63,7 @@ defmodule Recursion do
     Returns the list with the added element e if there didnt
     an element e in the list already.
 
-    Not sure about time complexity
+    Not sure about time complexity, around O(n)?
     """
     def add(e, []) do [e] end
     def add(e, [e | t]) do [e | t] end
@@ -83,7 +83,8 @@ defmodule Recursion do
     @doc """
     Returns a list of lists with equal elements
 
-    Not sure about time complexity
+    Not sure about time complexity,
+    pack is O(n), add_pack is around O(n), so O(n^2)?
     """
     def pack(lst) do pack(lst, []) end
     def pack([], packed) do packed end
@@ -102,7 +103,7 @@ defmodule Recursion do
     Inserts an element into an alread sorted list, keeping the
     order.
 
-    Not sure about time complexity
+    Not sure about time complexity, around O(n)?
     """
     def insert(e, []) do [e] end
     def insert(e, [h | t]) when h < e do
@@ -113,7 +114,8 @@ defmodule Recursion do
     @doc """
     Returns a sorted list of integers.
 
-    Not sure about time complexity
+    Not sure about time complexity,
+    insert is ~O(n) and isort is ~O(n) so, O(n^2) total?
     """
     def isort(lst) do isort(lst, []) end
     def isort([], sorted) do sorted end
