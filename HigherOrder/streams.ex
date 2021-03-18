@@ -87,6 +87,29 @@ defmodule Streams do
         {:ok, f1, fn() -> fib(f2, f1 + f2) end}
     end
 
+    #2.2
+    def next(from, to) do
+        if from <= to do
+            {:ok, from, fn() -> next(from + 1, to) end}
+        else
+            :nil
+        end
+    end
+
+    def range(from, to) do
+        {:stream, fn() -> next(from, to) end}
+    end
+
+    def mapG({:stream, next}, func) do
+        {:stream, fn() -> case next.() do
+                                {:ok, from, cont} ->
+                                    {:ok, func.(from), cont}
+                                :nil ->
+                                    :nil
+                                end
+                            end
+                        }
+    end
 
 
 
