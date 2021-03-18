@@ -290,6 +290,8 @@ defmodule Streams do
         # Take the first 5 elements of the range 1-10 that is
         # mapped to x * 3
         # Should return [15, 12, 9, 6, 3]
+        # But it returns [5, 4, 3, 2, 3]
+        # It only maps the first element :( )
         take(map(range, function), 5)
     end
 end
