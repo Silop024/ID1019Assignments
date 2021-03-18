@@ -284,6 +284,7 @@ defmodule Streams do
         # Just a generic function that maps all elements x to
         # x * 3
         function = fn(x) -> x * 3 end
+        
         # Call range function to get a stream range 1-10
         range = range(1, 10)
 
