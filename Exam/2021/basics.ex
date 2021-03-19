@@ -88,12 +88,13 @@ defmodule Basic do
         {0, fn() ->
     end
     """
-    
+
 
     def emulator([], _, _) do
         "something idk"
     end
-    def emulator([next_instruction | rest], counter, registers) do
+    # This or instructions as [next | rest] with tuples?
+    def emulator({next_instruction | rest}, counter, registers) do
         case next_instruction do
             {:halt} -> :halted
 
