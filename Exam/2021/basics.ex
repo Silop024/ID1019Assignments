@@ -107,10 +107,9 @@ defmodule Basic do
     end
 
 
-    # This or instructions as [next | rest] with tuples?
     def emulator(instructions, counter, registers) do
         #print_instruction(elem(instructions, counter))
-        #print_registers(registers)
+        print_registers(registers)
         instruction = elem(instructions, counter)
         IO.puts("counter: #{counter}")
 
@@ -165,7 +164,7 @@ defmodule Basic do
         instructions = {
                         {:addi, 1, 0, 10},
                         {:addi, 3, 0, 1},
-                        {:out, 3},
+                        {:out, 3},    # This or instructions as [next | rest] with tuples?
                         {:addi, 1, 1, -1},
                         {:add, 3, 2, 3},
                         {:out, 3},
