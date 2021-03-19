@@ -50,7 +50,11 @@ defmodule Exam do
         {:ok, [], fib}
     end
     def take(fib, n) do
+        # current is the next fibonacci number in the sequence
+        # next_fib is the continuation of the fibonacci sequence
 
+        # So when you call fib.() you get the next fib nr
+        # and the rest of the sequence as a function
         {:ok, current, next_fib} = fib.()
 
         {:ok, acc, next_fib} = take(next_fib, n - 1)
