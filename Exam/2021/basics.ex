@@ -88,15 +88,17 @@ defmodule Basic do
         {0, fn() ->
     end
     """
+    def reverse(lst) do reverse(lst, []) end
+    def reverse([], acc) do acc end
+    def reverse([h | t], acc) do
+        reverse(t, [h | acc])
+    end
 
-
-
-    def emulator(instructions, counter, registers) do
+    def emulator(instructions, counter, registers, output) do
         instruction = Kernel.elem(instructions, counter)
-        IO.puts("counter: #{counter}")
 
         case instruction do
-            {:halt} -> :halted
+            {:halt} -> {:halted, reverse(output)}
 
             {:beq, regX, regY, offset} ->
                 x = Kernel.elem(registers, regX)
@@ -104,10 +106,10 @@ defmodule Basic do
 
                 if x == y do
                     counter = counter + offset
-                    emulator(instructions, counter, registers)
+                    emulator(instructions, counter, registers, output)
                 else
                     counter = counter + 1
-                    emulator(instructions, counter, registers)
+                    emulator(instructions, counter, registers, output)
                 end
 
             {:addi, destination, regX, imm} ->
@@ -115,12 +117,11 @@ defmodule Basic do
 
                 result = x + imm
 
-                IO.puts("res: #{result}")
 
                 registers = Kernel.put_elem(registers, destination, result)
 
                 counter = counter + 1
-                emulator(instructions, counter, registers)
+                emulator(instructions, counter, registers, output)
 
             {:add, destination, regX, regY} ->
                 x = Kernel.elem(registers, regX)
@@ -130,39 +131,39 @@ defmodule Basic do
                 registers = Kernel.put_elem(registers, destination, result)
 
                 counter = counter + 1
-                emulator(instructions, counter, registers)
+                emulator(instructions, counter, registers, output)
 
             {:out, regX} ->
                 x = Kernel.elem(registers, regX)
 
-                IO.puts("Out: #{x}, reg: #{regX}")
 
                 counter = counter + 1
-                emulator(instructions, counter, registers)
+                emulator(instructions, counter, registers, [x | output])
 
         end
     end
 
     def test() do
         instructions = {
-                        {:addi, 1, 0, 10},
-                        {:addi, 3, 0, 1},
-                        {:out, 3},
-                        {:addi, 1, 1, -1},
-                        {:add, 3, 2, 3},
-                        {:out, 3},
-                        {:beq, 1, 0, 3},
-                        {:addi, 2, 4, 0},
-                        {:beq, 0, 0, -6},
-                        {:halt}
+                        {:addi, 1, 0, 10},  #0
+                        {:addi, 3, 0, 1},   #1
+                        {:out, 3},          #2
+                        {:addi, 1, 1, -1},  #3
+                        {:addi, 4, 3, 0},   #4
+                        {:add, 3, 2, 3},    #5
+                        {:out, 3},          #6
+                        {:beq, 1, 0, 3},    #7
+                        {:addi, 2, 4, 0},   #8
+                        {:beq, 0, 0, -6},   #9
+                        {:halt}             #10
         }
-        emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
+        emulator(instructions, 0, {0, 0, 0, 0, 0, 0}, [])
     end
 
     def test1() do
         instructions = {{:addi, 1, 0, 10}, {:out, 1}, {:addi, 2, 0, 5},
                         {:out, 2}, {:add, 3, 1, 2}, {:out, 3}, {:beq, 4,4,3}, {:halt}, {:out, 1}, {:addi, 4, 4, -1}, {:out, 4}, {:halt}
                     }
-        emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
+        emulator(instructions, 0, {0, 0, 0, 0, 0, 0}, [])
     end
 end
