@@ -143,6 +143,7 @@ defmodule Basic do
         end
     end
 
+    # Gets fibonacci
     def test() do
         instructions = {
                         {:addi, 1, 0, 10},  #0
@@ -157,13 +158,6 @@ defmodule Basic do
                         {:beq, 0, 0, -6},   #9
                         {:halt}             #10
         }
-        emulator(instructions, 0, {0, 0, 0, 0, 0, 0}, [])
-    end
-
-    def test1() do
-        instructions = {{:addi, 1, 0, 10}, {:out, 1}, {:addi, 2, 0, 5},
-                        {:out, 2}, {:add, 3, 1, 2}, {:out, 3}, {:beq, 4,4,3}, {:halt}, {:out, 1}, {:addi, 4, 4, -1}, {:out, 4}, {:halt}
-                    }
         emulator(instructions, 0, {0, 0, 0, 0, 0, 0}, [])
     end
 end
