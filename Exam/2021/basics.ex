@@ -109,54 +109,51 @@ defmodule Basic do
 
     def emulator(instructions, counter, registers) do
         #print_instruction(elem(instructions, counter))
-        print_registers(registers)
-        instruction = elem(instructions, counter)
-        IO.puts("counter: #{counter}")
+        #print_registers(registers)
+        instruction = Kernel.elem(instructions, counter)
 
         case instruction do
             {:halt} -> :halted
 
             {:beq, regX, regY, offset} ->
-                x = elem(registers, regX)
-                y = elem(registers, regY)
+                x = Kernel.elem(registers, regX)
+                y = Kernel.elem(registers, regY)
 
                 if x == y do
                     counter = counter + offset
-                    emulator(elem(instructions, counter), counter, registers)
+                    emulator(instructions, counter, registers)
                 else
                     counter = counter + 1
-                    emulator(elem(instructions, counter), counter, registers)
+                    emulator(instructions, counter, registers)
                 end
 
             {:addi, destination, regX, imm} ->
-                x = elem(registers, regX)
+                x = Kernel.elem(registers, regX)
 
                 result = x + imm
-                IO.puts("res: #{result}")
-                registers = put_elem(registers, destination, result)
+
+                registers = Kernel.put_elem(registers, destination, result)
 
                 counter = counter + 1
-                emulator(elem(instructions, counter), counter, registers)
+                emulator(instructions, counter, registers)
 
             {:add, destination, regX, regY} ->
-                x = elem(registers, regX)
-                y = elem(registers, regY)
+                x = Kernel.elem(registers, regX)
+                y = Kernel.elem(registers, regY)
 
                 result = x + y
-                registers = put_elem(registers, destination, result)
+                registers = Kernel.put_elem(registers, destination, result)
 
                 counter = counter + 1
-                emulator(elem(instructions, counter), counter, registers)
+                emulator(instructions, counter, registers)
 
             {:out, regX} ->
-                x = elem(registers, regX)
-                print_thing(x)
+                x = Kernel.elem(registers, regX)
 
+                IO.puts("Out: #{x}")
                 counter = counter + 1
-                emulator(elem(instructions, counter), counter, registers)
+                emulator(instructions, counter, registers)
 
-            something -> IO.puts("wtf")
-                        something
         end
     end
 
@@ -164,7 +161,7 @@ defmodule Basic do
         instructions = {
                         {:addi, 1, 0, 10},
                         {:addi, 3, 0, 1},
-                        {:out, 3},    # This or instructions as [next | rest] with tuples?
+                        {:out, 3},
                         {:addi, 1, 1, -1},
                         {:add, 3, 2, 3},
                         {:out, 3},
