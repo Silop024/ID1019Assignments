@@ -88,20 +88,94 @@ defmodule Basic do
         {0, fn() ->
     end
     """
-
-
-    def emulator([], _, _) do
-        "something idk"
+    def print_instruction({type, reg1, reg2, regorint}) do
+        IO.puts type <> reg1 <> reg2 <> regorint
     end
+    def print_instruction({type, reg}) do
+        IO.puts type <> reg
+    end
+    def print_instruction(_) do
+        IO.puts("idk")
+    end
+
+    def print_registers({s0, s1, s2, s3, s4, s5}) do
+        IO.puts s0 <> s1 <> s2 <> s3 <> s4 <> s5
+    end
+
+    def print_thing(x) do
+        IO.puts("hmm #{x}")
+    end
+
+
     # This or instructions as [next | rest] with tuples?
-    def emulator({next_instruction | rest}, counter, registers) do
-        case next_instruction do
+    def emulator(instructions, counter, registers) do
+        #print_instruction(elem(instructions, counter))
+        #print_registers(registers)
+        instruction = elem(instructions, counter)
+        
+        case instruction do
             {:halt} -> :halted
 
             {:beq, regX, regY, offset} ->
-                if regX == regY do
+                x = elem(registers, regX)
+                y = elem(registers, regY)
 
+                if x == y do
+                    emulator(elem(instructions, counter + offset), counter + offset, registers)
+                else
+                    counter = counter + 1
+                    emulator(elem(instructions, counter), counter, registers)
                 end
+
+            {:addi, destination, regX, imm} ->
+                x = elem(registers, regX)
+
+                result = x + imm
+                IO.puts("res: #{result}")
+                put_elem(registers, destination, result)
+
+                counter = counter + 1
+                emulator(elem(instructions, counter), counter, registers)
+
+            {:add, destination, regX, regY} ->
+                x = elem(registers, regX)
+                y = elem(registers, regY)
+
+                result = x + y
+                put_elem(registers, destination, result)
+
+                counter = counter + 1
+                emulator(elem(instructions, counter), counter, registers)
+
+            {:out, regX} ->
+                x = elem(registers, regX)
+                print_thing(x)
+
+                counter = counter + 1
+                emulator(elem(instructions, counter), counter, registers)
+            something -> IO.puts("wtf")
+                        something
         end
+    end
+
+    def test() do
+        instructions = {
+                        {:addi, 1, 0, 10},
+                        {:addi, 3, 0, 1},
+                        {:out, 3},
+                        {:addi, 1, 1, -1},
+                        {:add, 3, 2, 3},
+                        {:out, 3},
+                        {:beq, 1, 0, 3},
+                        {:addi, 2, 4, 0},
+                        {:beq, 0, 0, -6},
+                        {:halt}
+        }
+        emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
+    end
+
+    def test1() do
+        instructions = {{:addi, 1, 0, 10}, {:out, 1}}
+        emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
     end
 end
