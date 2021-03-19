@@ -112,7 +112,8 @@ defmodule Basic do
         #print_instruction(elem(instructions, counter))
         #print_registers(registers)
         instruction = elem(instructions, counter)
-        
+        IO.puts("counter: #{counter}")
+
         case instruction do
             {:halt} -> :halted
 
@@ -121,7 +122,8 @@ defmodule Basic do
                 y = elem(registers, regY)
 
                 if x == y do
-                    emulator(elem(instructions, counter + offset), counter + offset, registers)
+                    counter = counter + offset
+                    emulator(elem(instructions, counter), counter, registers)
                 else
                     counter = counter + 1
                     emulator(elem(instructions, counter), counter, registers)
@@ -132,7 +134,7 @@ defmodule Basic do
 
                 result = x + imm
                 IO.puts("res: #{result}")
-                put_elem(registers, destination, result)
+                registers = put_elem(registers, destination, result)
 
                 counter = counter + 1
                 emulator(elem(instructions, counter), counter, registers)
@@ -142,7 +144,7 @@ defmodule Basic do
                 y = elem(registers, regY)
 
                 result = x + y
-                put_elem(registers, destination, result)
+                registers = put_elem(registers, destination, result)
 
                 counter = counter + 1
                 emulator(elem(instructions, counter), counter, registers)
@@ -153,6 +155,7 @@ defmodule Basic do
 
                 counter = counter + 1
                 emulator(elem(instructions, counter), counter, registers)
+
             something -> IO.puts("wtf")
                         something
         end
@@ -175,7 +178,7 @@ defmodule Basic do
     end
 
     def test1() do
-        instructions = {{:addi, 1, 0, 10}, {:out, 1}}
+        instructions = {{:addi, 1, 0, 10}, {:out, 1}, {:halt}}
         emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
     end
 end
