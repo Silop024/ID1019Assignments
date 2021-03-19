@@ -115,6 +115,8 @@ defmodule Basic do
 
                 result = x + imm
 
+                IO.puts("res: #{result}")
+
                 registers = Kernel.put_elem(registers, destination, result)
 
                 counter = counter + 1
