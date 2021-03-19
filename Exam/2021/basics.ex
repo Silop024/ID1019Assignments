@@ -88,29 +88,12 @@ defmodule Basic do
         {0, fn() ->
     end
     """
-    def print_instruction({type, reg1, reg2, regorint}) do
-        IO.puts type <> reg1 <> reg2 <> regorint
-    end
-    def print_instruction({type, reg}) do
-        IO.puts type <> reg
-    end
-    def print_instruction(_) do
-        IO.puts("idk")
-    end
 
-    def print_registers({s0, s1, s2, s3, s4, s5}) do
-        IO.puts s0 <> s1 <> s2 <> s3 <> s4 <> s5
-    end
-
-    def print_thing(x) do
-        IO.puts("hmm #{x}")
-    end
 
 
     def emulator(instructions, counter, registers) do
-        #print_instruction(elem(instructions, counter))
-        #print_registers(registers)
         instruction = Kernel.elem(instructions, counter)
+        IO.puts("counter: #{counter}")
 
         case instruction do
             {:halt} -> :halted
@@ -150,7 +133,8 @@ defmodule Basic do
             {:out, regX} ->
                 x = Kernel.elem(registers, regX)
 
-                IO.puts("Out: #{x}")
+                IO.puts("Out: #{x}, reg: #{regX}")
+
                 counter = counter + 1
                 emulator(instructions, counter, registers)
 
@@ -174,7 +158,9 @@ defmodule Basic do
     end
 
     def test1() do
-        instructions = {{:addi, 1, 0, 10}, {:out, 1}, {:halt}}
+        instructions = {{:addi, 1, 0, 10}, {:out, 1}, {:addi, 2, 0, 5},
+                        {:out, 2}, {:add, 3, 1, 2}, {:out, 3}, {:beq, 4,4,3}, {:halt}, {:out, 1}, {:addi, 4, 4, -1}, {:out, 4}, {:halt}
+                    }
         emulator(instructions, 0, {0, 0, 0, 0, 0, 0})
     end
 end
